@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Pokémon Café ReMix - last digit of score for 1MC and Slow Cooking</title>
+</head>
+<body>
+  <!-- Define the objective -->
+  <form onsubmit="event.preventDefault()">
+    <div>
+      Make the last digit of my score
+      <label for="digit-select" style="display:none">Make the last digit of my score</label>
+      <input id="digit-select" type="number" min="0" max="9" required name="digit">
+      in
+      <label for="mode-select" style="display:none">in</label>
+      <select id="mode-select">
+        <option value="0">slow cooking</option>
+        <option value="1">one-minute cooking</option>
+      </select>
+    </div>
+    <!-- Premium bonus -->
+    <div>
+      I have a +10% bonus from the premium pass:
+      <b id="premium-answer"></b>
+      <input type="radio" name="premium" value="y" id="premium-y"><label for="premium-y">yes</label>
+      <input type="radio" name="premium" value="n" id="premium-n"><label for="premium-n">no</label>
+    </div>
+  </form>
+  <hr>
+  <noscript>This page requires the use of JavaScript. No other permissions are needed. Please allow JavaScript for this page on your web browser.</noscript>
+  <script src="lastdigit.js"></script>
+</body>
+</html>
