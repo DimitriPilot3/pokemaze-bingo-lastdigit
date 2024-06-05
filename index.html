@@ -1,34 +1,82 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Pokémon Café ReMix - last digit of score for 1MC and Slow Cooking</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Pokémon Café ReMix bingo helper - last digit of score</title>
+	<style>
+		.alert {
+			border: 2px solid;
+			border-radius: 16px;
+			padding: 6px;
+			margin: 3px;
+		}
+		.info {
+			background-color: #e3f7fc;
+			border-color: #8ed9f6;
+		}
+		.warning {
+			background-color: #ffbb66;
+			border-color: #f08030;
+		}
+		.hidden { display: none; }
+	</style>
 </head>
 <body>
-  <!-- Define the objective -->
-  <form onsubmit="event.preventDefault()">
-    <div>
-      Make the last digit of my score
-      <label for="digit-select" style="display:none">Make the last digit of my score</label>
-      <input id="digit-select" type="number" min="0" max="9" required name="digit">
-      in
-      <label for="mode-select" style="display:none">in</label>
-      <select id="mode-select">
-        <option value="0">slow cooking</option>
-        <option value="1">one-minute cooking</option>
-      </select>
-    </div>
-    <!-- Premium bonus -->
-    <div>
-      I have a +10% bonus from the premium pass:
-      <b id="premium-answer"></b>
-      <input type="radio" name="premium" value="y" id="premium-y"><label for="premium-y">yes</label>
-      <input type="radio" name="premium" value="n" id="premium-n"><label for="premium-n">no</label>
-    </div>
-  </form>
-  <hr>
-  <noscript>This page requires the use of JavaScript. No other permissions are needed. Please allow JavaScript for this page on your web browser.</noscript>
-  <script src="lastdigit.js"></script>
+	<h1>Bingo helper: get that last digit!</h1>
+	<form id="start-form" onsubmit="event.preventDefault(); _onStart()">
+		<!-- Bingo mission -->
+		<div>
+			<label for="digit-select">Make the last digit of my score</label>
+			<input id="digit-select" name="digit" type="number" min="0" max="9" inputmode="numeric" required>
+			in
+			<select id="mode-select" name="mode" aria-label="game mode">
+				<option value="1MC">one-minute cooking</option>
+				<option value="SC">slow cooking</option>
+			</select>
+		</div>
+		<!-- Is the premium pass active? -->
+		<div>
+			<label for="premium-checkbox">I have the premium pass:</label>
+			<input type="checkbox" name="premium" id="premium-checkbox">
+		</div>
+		<button name="stage" type="submit" value="1">Start!</button>
+		<hr>
+	</form>
+	
+	<!-- Step 2 -->
+	<form id="main-form" hidden onsubmit="event.preventDefault(); _onNext()" onreset="_onReset()">
+		<header>
+			<input type="button" value="&lt; Back" onclick="_onBack()">
+			<em id="_headerText"></em>
+		</header>
+		<div class="only-SC">
+			<label for="start-score">Score digits at the start of this stage:</label>
+			<input id="start-score" name="startScore" type="text" inputmode="numeric" pattern="[0-9]*" disabled>
+		</div>
+		<div>
+			<label for="end-score">Current score digits:</label>
+			<input id="end-score" name="endScore" type="text" inputmode="numeric" pattern="[0-9]*">
+		</div>
+		<details class="alert info" id="results" hidden>
+			<summary>No bingo match for '$'</summary>
+			<table></table>
+		</details>
+		<div class="only-SC">
+			<button type="submit">Next stage!</button>
+			<button type="reset">Restart</button>
+		</div>
+		<hr>
+		<div class="alert info">
+			<em id="_pleaseEnterLastDigitsText">Please enter the last 3 digits of the score(s) on this form.</em>
+			<p>As you type in your current score's digits, you may find results that match one of your desired score number requirements from your bingo card. Once your score matches one of these ending numbers, pause and quit! If your score doesn't match, keep playing to adjust your score until it does.</p>
+			<p class="only-SC">Once the game is over, you can use the Restart button to go back to Stage 1.</p>
+			<p class="only-1MC">CAUTION: In <em title="1 minute cooking">1MC</em>, make sure there are <b>NO</b> skills or megaphones on screen when you quit!</p>
+			<!--<picture><source srcset="honey.webp" type="image/webp"><img src="honey.png" style="height: 1.5em; vertical-align: middle;" title="honey"></picture>-->
+			<!--<picture><source srcset="butter.webp" type="image/webp"><img src="butter.png" style="height: 1.5em; vertical-align: middle;" title="butter"></picture>-->
+		</div>
+	</form>
+	<noscript>This page requires the use of JavaScript. No other permissions are needed. Please allow JavaScript for this page on your web browser.</noscript>
+	<script src="lastdigit.js"></script>
 </body>
 </html>
