@@ -20,15 +20,30 @@
 			border-color: #f08030;
 		}
 		.hidden { display: none; }
+		.score-align {
+			display: inline-block;
+			text-align: end;
+		}
+		.score-align input {
+			text-align: end;
+		}
 	</style>
+	<script>
+		function __preventDefault() {
+			if (event.preventDefault)
+				event.preventDefault()
+			else
+				event.returnValue = false // for IE8
+		}
+	</script>
 </head>
 <body>
 	<h1>Bingo helper: get that last digit!</h1>
-	<form id="start-form" onsubmit="event.preventDefault(); _onStart()">
+	<form id="start-form" onsubmit="__preventDefault(); _onStart()">
 		<!-- Bingo mission -->
 		<div>
 			<label for="digit-select">Make the last digit of my score</label>
-			<input id="digit-select" name="digit" type="number" min="0" max="9" inputmode="numeric" required>
+			<input id="digit-select" name="digit" type="number" min="0" max="9" inputmode="numeric" required on>
 			in
 			<select id="mode-select" name="mode" aria-label="game mode">
 				<option value="1MC">one-minute cooking</option>
@@ -40,28 +55,37 @@
 			<label for="premium-checkbox">I have the premium pass:</label>
 			<input type="checkbox" name="premium" id="premium-checkbox">
 		</div>
-		<button name="stage" type="submit" value="1">Start!</button>
+		<button name="stage" type="submit" value="1">Start</button>
 		<hr>
 	</form>
 	
 	<!-- Step 2 -->
-	<form id="main-form" hidden onsubmit="event.preventDefault(); _onNext()" onreset="_onReset()">
+	<form id="main-form" class="hidden" onsubmit="__preventDefault(); _onNext()" onreset="_onReset()">
 		<header>
 			<input type="button" value="&lt; Back" onclick="_onBack()">
 			<em id="_headerText"></em>
 		</header>
-		<div class="only-SC">
-			<label for="start-score">Score digits at the start of this stage:</label>
-			<input id="start-score" name="startScore" type="text" inputmode="numeric" pattern="[0-9]*" disabled>
+		<hr>
+		<div class="score-align">
+			<div class="only-SC">
+				<label for="start-score">Score when the stage started:</label>
+				<input
+					id="start-score" name="startScore" type="text" size="8" inputmode="numeric" pattern="[0-9]*"
+					onkeydown="_onKeyDownDigitsOnly(event)" onchange="_onChangeDigitsOnly(this)" onpaste="return false">
+			</div>
+			<div>
+				<label for="cur-score">Current score digits:</label>
+				<input
+					id="cur-score" name="currentScore" type="text" size="8" inputmode="numeric" pattern="[0-9]*"
+					onkeydown="_onKeyDownDigitsOnly(event)" onchange="_onChangeDigitsOnly(this)" onpaste="return false">
+			</div>
 		</div>
-		<div>
-			<label for="end-score">Current score digits:</label>
-			<input id="end-score" name="endScore" type="text" inputmode="numeric" pattern="[0-9]*">
+		<div class="alert info" hidden>
+			<details id="results">
+				<summary>No bingo match for '$'</summary>
+				<table><tbody><tr><td>1</td></tr></tbody></table>
+			</details>
 		</div>
-		<details class="alert info" id="results" hidden>
-			<summary>No bingo match for '$'</summary>
-			<table></table>
-		</details>
 		<div class="only-SC">
 			<button type="submit">Next stage!</button>
 			<button type="reset">Restart</button>
@@ -69,9 +93,11 @@
 		<hr>
 		<div class="alert info">
 			<em id="_pleaseEnterLastDigitsText">Please enter the last 3 digits of the score(s) on this form.</em>
+			<em><b>Make sure there are no skills or megaphones on screen!</b></em>
+			<p class="only-1MC">Remember to pause the game if you haven't already.</p>
 			<p>As you type in your current score's digits, you may find results that match one of your desired score number requirements from your bingo card. Once your score matches one of these ending numbers, pause and quit! If your score doesn't match, keep playing to adjust your score until it does.</p>
-			<p class="only-SC">Once the game is over, you can use the Restart button to go back to Stage 1.</p>
-			<p class="only-1MC">CAUTION: In <em title="1 minute cooking">1MC</em>, make sure there are <b>NO</b> skills or megaphones on screen when you quit!</p>
+			<p class="only-SC">Once the game ends, use the Restart button to go back to Stage 1.</p>
+			
 			<!--<picture><source srcset="honey.webp" type="image/webp"><img src="honey.png" style="height: 1.5em; vertical-align: middle;" title="honey"></picture>-->
 			<!--<picture><source srcset="butter.webp" type="image/webp"><img src="butter.png" style="height: 1.5em; vertical-align: middle;" title="butter"></picture>-->
 		</div>

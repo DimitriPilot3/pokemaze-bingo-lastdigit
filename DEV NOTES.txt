@@ -1,0 +1,59 @@
+PokéCaféReMix last digit bingo helper
+
+(images and synopsis to describe what we're talkin about)
+(tooltips and alt text to describe 1MC and SC options)
+
+
+ Mode: ( ) 1MC ( ) SC
+ Have premium pass? ( ) Yes ( ) No
+ Digits needed for bingo:
+ [0] [1] [2] [3] [4] [5] [6] [7] [8] [9]
+
+ *Button1
+
+
+where the label of Button1 depends on the mode:
+"Start" or "To stage 1"
+and Button1 is greyed until this form validates
+
+
+Upon clicking Button1:
+If the digit 0 is selected, show an alert on how to do it easily.
+Else if 1MC is selected, load this form:
+
+ [<- Back]
+ <div class='infotip'>
+ When entering scores, only the last $ digits are required.
+ Make sure to remove all megaphones and honey before entering scores!
+ </div>
+ Current score: *Number2
+ If you quit now, the final score will end in $.
+
+
+(placing a keystroke handler on the number field to filter out non-digit characters and update the form in real time)
+
+
+Else if SC is selected, load this form:
+ [<- Back]
+ <div class='infotip'>
+ When entering scores, only the last *X digits are required.
+ </div>
+ Score from stage $: *Number1
+ Current score: *Number2
+ If you quit now, the final score will end in $.
+ [To stage $]
+
+(again, placing a keystroke handler on the number fields but also a click handler on the "To stage" button)
+
+
+Anyway, what do we do with Number2? What kind of feedback does the user want?
+I have one idea that could work:
+
+   Autosuggest based on the digits entered (from left to right)
+
+When a digit is entered, check if there are any full number combinations that satisfy both the user input and the bingo number requirement.
+
+If so, show all auto-suggested numbers sorted numerically, next to the
+input field. This makes it easy to compare numbers against in-game score.
+
+If not, show a red check mark.
